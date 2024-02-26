@@ -85,9 +85,6 @@ function Chat() {
               return null;
             }
           })}
-          {/* {query && <UserQuery query={query} />}
-
-          {loading ? <Loader /> : <BotResponse response={response} />} */}
         </div>
         <div className="flex">
           <input
