@@ -39,8 +39,9 @@ function Chat() {
 
   const sendQuery = async () => {
     try {
+      setQuery("");
       addQueryToChat([["human", query]]);
-      //   setLoading(true);
+      setLoading(true);
       const response = await fetch(`${apiUrl}/dnd/chat`, {
         method: "POST",
         headers: {
@@ -59,40 +60,52 @@ function Chat() {
       setTimeout(() => {
         setLoading(false);
         setChat(data.chatHistory);
+        if (data.imageUrl !== null) {
+          addQueryToChat([["ai", data.imageUrl[0].url]]);
+          console.log("image url saved");
+        }
       }, 2000);
     } catch (error) {
       console.error(error);
     }
   };
 
+  const clearLocalStorage = () => {
+    localStorage.clear();
+    // also clean the chat and tokens
+    setChat([]);
+  };
+
   return (
-    <div className="bg-gray-100 h-screen flex items-center justify-center ">
+    <div className="bg-gray-100 h-screen flex items-center justify-center  flex-col ">
       <Tokens />
 
-      <div className="max-w-lg w-full bg-white shadow-md rounded-md p-6">
-        <div
-          id="chat-window"
-          className=" overflow-auto mb-4 flex flex-col items-start"
-        >
+      <div className="max-w-4xl w-full bg-white shadow-md rounded-md p-6 relative">
+        <div className="overflow-auto mb-4 flex flex-col items-start max-h-[750px]">
           {chat.map((item, index) => {
-            if (item[0] === "human") {
-              return <UserQuery key={index} query={item[1]} />;
-            } else if (item[0] === "ai") {
-              return <BotResponse key={index} response={item[1]} />;
-            } else if (loading) {
-              return <Loader />;
-            } else {
-              return null;
+            switch (item[0]) {
+              case "human":
+                return <UserQuery key={index} query={item[1]} />;
+              case "ai":
+                return <BotResponse key={index} response={item[1]} />;
+              default:
+                return null;
             }
           })}
         </div>
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center  bg-opacity-50 backdrop-blur-md">
+            <Loader />
+          </div>
+        )}
         <div className="flex">
-          <input
-            id="message-input"
-            type="text"
+          <textarea
             placeholder="Ask your message here"
             className="flex-grow rounded-l-md border border-gray-300 p-2 focus:outline-none focus:border-blue-500"
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
+            value={query}
           />
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-r-md"
@@ -105,6 +118,9 @@ function Chat() {
           </button>
         </div>
       </div>
+      <button type="button" onClick={clearLocalStorage}>
+        Clear Local Storage
+      </button>
     </div>
   );
 }
