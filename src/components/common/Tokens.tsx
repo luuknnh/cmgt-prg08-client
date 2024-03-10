@@ -1,4 +1,4 @@
-import ChatStore from '../../store/ChatStore';
+import ChatStore from "../../store/ChatStore";
 
 type tokenUsage = {
   completionTokens: number;
@@ -11,7 +11,7 @@ function Tokens() {
   return (
     <div className="flex flex-row space-x-2">
       <div>
-        <h2 className="">Tokens used for the last chat</h2>
+        <h2 className="">Tokens used</h2>
       </div>
       <div>
         <h4>Total Tokens: {tokens.totalTokens}</h4>

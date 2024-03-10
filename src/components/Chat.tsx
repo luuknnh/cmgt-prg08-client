@@ -61,18 +61,20 @@ function Chat() {
         setLoading(false);
         setChat(data.chatHistory);
         if (data.imageUrl !== null) {
-          addQueryToChat([["ai", data.imageUrl[0].url]]);
+          // ! voor Vercel andere manier van opslaan
+          addQueryToChat([["ai", data.imageUrl]]);
+          // addQueryToChat([["ai", data.imageUrl[0].url]]);
           console.log("image url saved");
         }
       }, 2000);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
   const clearLocalStorage = () => {
     localStorage.clear();
-    // also clean the chat and tokens
     setChat([]);
   };
 

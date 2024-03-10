@@ -7,7 +7,9 @@ function BotResponse({ response }: { response: string }) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isImageLoaded, setImageLoaded] = useState(true);
   const isImageUrl = (url: string) => {
-    return url.includes("blob.core.windows.net");
+    // ! check for images Live on Vercel
+    return url.includes("picsum.photos/200/300");
+    // return url.includes("blob.core.windows.net");
   };
 
   const handleClick = () => {
